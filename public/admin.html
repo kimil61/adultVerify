@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>★전국밤알바★</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.15/dist/browser-image-compression.js"></script>
+</head>
+<body>
+
+<!-- 🔐 관리자 로그인 화면 -->
+<div id="loginScreen" class="login-card">
+  <div class="login-toolbar">🔐 관리자 로그인</div>
+  <input id="adminId" type="text" placeholder="ID를 입력하세요" class="login-input">
+  <input id="adminPw" type="password" placeholder="비밀번호를 입력하세요" class="login-input">
+  <button onclick="login()" class="login-btn">로그인</button>
+</div>
+
+<!-- 🔓 관리자 콘텐츠 -->
+<div id="adminContent" style="display:none;">
+  <!-- 상단 검색 바 -->
+  <div class="top-search-bar" id="searchBar">
+    <button id="homeBtn">🏠 홈</button>
+    <select id="sido">
+      <option value="">시도 선택</option>
+      <option value="서울">서울</option>
+      <option value="부산">부산</option>
+      <option value="대구">대구</option>
+      <option value="인천">인천</option>
+      <option value="광주">광주</option>
+      <option value="대전">대전</option>
+      <option value="울산">울산</option>
+      <option value="세종">세종</option>
+      <option value="경기">경기</option>
+      <option value="강원">강원</option>
+      <option value="충북">충북</option>
+      <option value="충남">충남</option>
+      <option value="전북">전북</option>
+      <option value="전남">전남</option>
+      <option value="경북">경북</option>
+      <option value="경남">경남</option>
+      <option value="제주">제주</option>
+    </select>
+    <select id="gugun">
+      <option value="">구/군 선택</option>
+    </select>
+    <button id="searchBtn">검색</button>
+    <button id="resetSearch" title="검색 초기화">🔃</button>
+    <button id="logoutBtn" title="로그아웃"><i class="fas fa-power-off"></i></button>
+  </div>
+
+  <!-- 카테고리 바 -->
+  <div class="top-bar" id="categoryBar">
+    <div class="editor-toolbar">
+      <button class="category-button" onclick="filterByCategory('노래주점')">노래주점</button>
+      <button class="category-button" onclick="filterByCategory('룸싸롱')">룸싸롱</button>
+      <button class="category-button" onclick="filterByCategory('텐/쩜오')">텐/쩜오</button>
+      <button class="category-button" onclick="filterByCategory('BAR')">BAR</button>
+      <button class="category-button" onclick="filterByCategory('라이브')">라이브</button>
+      <button class="category-button" onclick="filterByCategory('다방')">다방</button>
+      <button class="category-button" onclick="filterByCategory('마사지')">마사지</button>
+      <button class="category-button" onclick="filterByCategory('BJ')">BJ</button>
+      <button class="category-button" onclick="filterByCategory('영업진')">영업진</button>
+      <button class="category-button" onclick="filterByCategory('기타')">기타</button>
+    </div>
+  </div>
+
+  <!-- 글자 설정 툴바 -->
+  <div class="top-bar" id="editorToolbar">
+    <div class="editor-toolbar">
+      <select id="fontSize">
+        <option value="">크기 선택</option>
+        <option value="13">13px</option>
+        <option value="15">15px</option>
+        <option value="17">17px</option>
+        <option value="20">20px</option>
+        <option value="25">25px</option>
+        <option value="30">30px</option>
+        <option value="35">35px</option>
+        <option value="40">40px</option>
+        <option value="45">45px</option>
+        <option value="50">50px</option>
+        <option value="55">55px</option>
+      </select>
+      <select id="fontFamily">
+        <option value="">글꼴</option>
+        <option value="Nanum Gothic">나눔고딕</option>
+        <option value="Gowun Batang">고운바탕</option>
+        <option value="Do Hyeon">도현체</option>
+        <option value="Black Han Sans">블랙한한스</option>
+        <option value="Sunflower">해바라기</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Open Sans">Open Sans</option>
+        <option value="Oswald">Oswald</option>
+        <option value="Raleway">Raleway</option>
+        <option value="Batang">바탕체</option>
+        <option value="Gungsuh">궁서체</option>
+        <option value="Dotum">돋움</option>
+        <option value="HCR Batang">함초롬바탕</option>
+        <option value="HCR Dotum">함초롬돋움</option>
+      </select>
+      <select id="fontColor">
+        <option value="">색상</option>
+        <option value="black">검정</option>
+        <option value="gray">회색</option>
+        <option value="red">빨강</option>
+        <option value="orange">주황</option>
+        <option value="pink">핑크</option>
+        <option value="yellow">노랑</option>
+        <option value="green">초록</option>
+        <option value="#ADFF2F">연두</option>
+        <option value="blue">파랑</option>
+        <option value="purple">보라</option>
+      </select>
+      <button onclick="alignText('Left')"><i class="fas fa-align-left"></i></button>
+      <button onclick="alignText('Center')"><i class="fas fa-align-center"></i></button>
+      <button onclick="alignText('Right')"><i class="fas fa-align-right"></i></button>
+      <button onclick="toggleBold()"><i class="fas fa-bold"></i></button>
+      <button onclick="toggleItalic()"><i class="fas fa-italic"></i></button>
+      <button onclick="toggleUnderline()"><i class="fas fa-underline"></i></button>
+    </div>
+    <div class="button-group">
+      <button id="uploadTrigger">사진 업로드</button>
+      <!-- DB 초기화 버튼은 요청에 따라 삭제됨 -->
+    </div>
+  </div>
+
+  <!-- 부채꼴 제목 -->
+  <h1 class="curved-title" aria-label="★전국밤알바★">
+    <span>★</span><span>전</span><span>국</span><span>밤</span><span>알</span><span>바</span><span>★</span>
+  </h1>
+
+  <input type="file" id="imageUpload" accept="image/*" multiple hidden />
+  <div id="albumContainer" class="album-container"></div>
+  <div id="pagination" class="pagination"></div>
+
+  <footer class="biz-info">
+    <p>상호명: 전국밤알바</p>
+    <p>대표자: 홍길동</p>
+    <p>사업자등록번호: 123-45-67890</p>
+    <p>주소: 서울특별시 강남구 테헤란로 123</p>
+    <p>문의: 010-1234-5678</p>
+  </footer>
+</div>
+
+<!-- 기능 연결 -->
+<script src="app.js"></script>
+
+<!-- 로그인 / 로그아웃 + Enter 키 처리 + 다른 탭 반영 -->
+<script>
+  function login() {
+    const id = document.getElementById("adminId").value;
+    const pw = document.getElementById("adminPw").value;
+    if (id === "sk" && pw === "0001") {
+      localStorage.setItem("adminLogin", "true");
+      location.reload();
+    } else {
+      alert("❌ 로그인 실패");
+    }
+  }
+
+  const isLoggedIn = localStorage.getItem("adminLogin") === "true";
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const pwInput = document.getElementById("adminPw");
+    if (pwInput) {
+      pwInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          login();
+        }
+      });
+    }
+
+    if (isLoggedIn) {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminContent").style.display = "block";
+
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          localStorage.removeItem("adminLogin");
+          alert("로그아웃 되었습니다.");
+          location.href = "index.html";
+        };
+      }
+    }
+  });
+
+  window.addEventListener("storage", function (e) {
+    if (e.key === "adminLogin" && e.newValue !== "true") {
+      alert("다른 창에서 로그아웃되었습니다.");
+      location.href = "index.html";
+    }
+  });
+</script>
+
+</body>
+</html>

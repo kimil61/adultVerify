@@ -1,306 +1,251 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>성인인증 완료</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
-            font-size: 18px;
-        }
-        
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .content {
-            display: none;
-        }
-        
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .user-details h3 {
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 3px;
-        }
-        
-        .user-details p {
-            color: #666;
-            font-size: 13px;
-        }
-        
-        .btn-logout {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
-            text-decoration: none;
-        }
-        
-        .btn-logout:hover {
-            background: #ff3838;
-        }
-        
-        .main-content {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .welcome-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .success-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-        
-        .welcome-title {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .welcome-desc {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        
-        .service-section {
-            margin-top: 30px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        .service-title {
-            color: #333;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .service-desc {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .service-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .service-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-        
-        .service-btn:hover {
-            background: #5a6fd8;
-        }
-        
-        .unauthorized {
-            display: none;
-            text-align: center;
-            color: white;
-            margin-top: 50px;
-        }
-        
-        .unauthorized h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .unauthorized p {
-            font-size: 16px;
-            opacity: 0.8;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>★전국밤알바★</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.15/dist/browser-image-compression.js"></script>
+  <script>
+    // ✅ 항상 일반 사용자 권한
+    localStorage.removeItem("adminLogin");
+  </script>
+  
+  <!-- 성인인증 로딩/미인증 화면 스타일 -->
+  <style>
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      font-family: 'Nanum Gothic', sans-serif;
+    }
+    
+    .auth-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 400px;
+      margin: 20px;
+    }
+    
+    .auth-loading .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .auth-unauthorized h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .auth-unauthorized p {
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .main-content {
+      display: none;
+    }
+    
+    .main-content.show {
+      display: block;
+    }
+  </style>
 </head>
-
 <body>
-    <!-- 로딩 화면 -->
-    <div class="loading" id="loadingScreen">
-        <div class="spinner"></div>
-        인증 상태 확인 중...
+  
+  <!-- 성인인증 로딩 화면 -->
+  <div id="authLoadingScreen" class="auth-overlay auth-loading">
+    <div class="auth-container">
+      <div class="spinner"></div>
+      <p>성인인증 상태를 확인하고 있습니다...</p>
     </div>
-    
-    <!-- 성인인증 완료 후 메인 콘텐츠 -->
-    <div class="content" id="mainContent">
-        <div class="header">
-            <div class="user-info">
-                <div class="user-icon" id="userIcon">U</div>
-                <div class="user-details">
-                    <h3 id="userName">사용자님</h3>
-                    <p>성인인증 완료 ✓</p>
-                </div>
-            </div>
-            <div>
-                <a href="/logout" class="btn-logout">로그아웃</a>
-            </div>
-        </div>
-        
-        <div class="main-content">
-            <div class="welcome-section">
-                <div class="success-icon">✅</div>
-                <h1 class="welcome-title">성인인증이 완료되었습니다!</h1>
-                <p class="welcome-desc">
-                    이제 모든 서비스를 자유롭게 이용하실 수 있습니다.<br>
-                    안전하고 즐거운 이용 되시기 바랍니다.
-                </p>
-            </div>
-            
-            <div class="service-section">
-                <h2 class="service-title">🎉 서비스 이용 안내</h2>
-                <p class="service-desc">
-                    성인인증된 유저만 확인할 수 있는 페이지입니다.<br>
-                    여기에 실제 서비스 콘텐츠를 추가하세요.
-                </p>
-                <div class="service-buttons">
-                    <button class="service-btn" onclick="alert('서비스 기능 1')">기능 1</button>
-                    <button class="service-btn" onclick="alert('서비스 기능 2')">기능 2</button>
-                    <button class="service-btn" onclick="alert('서비스 기능 3')">기능 3</button>
-                </div>
-            </div>
-        </div>
+  </div>
+  
+  <!-- 미인증 화면 -->
+  <div id="authUnauthorizedScreen" class="auth-overlay auth-unauthorized" style="display: none;">
+    <div class="auth-container">
+      <h2>🔐 성인인증 필요</h2>
+      <p>이 사이트는 만 19세 이상만 이용 가능합니다.<br>성인인증을 진행해주세요.</p>
     </div>
-    
-    <!-- 미인증 상태 -->
-    <div class="unauthorized" id="unauthorizedScreen">
-        <h2>🔐 접근 권한이 없습니다</h2>
-        <p>성인인증이 필요합니다. 잠시 후 인증 페이지로 이동합니다.</p>
-    </div>
+  </div>
 
-    <script>
-        // 성인인증 상태 확인 함수
-        async function checkAuthStatus() {
-            try {
-                const response = await fetch('/api/check-auth');
-                const result = await response.json();
-                
-                console.log('인증 상태 확인:', result);
-                
-                if (result.isAuthenticated) {
-                    // 인증된 경우 - 메인 콘텐츠 표시
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    document.getElementById('mainContent').style.display = 'block';
-                    
-                    // 사용자 정보 업데이트
-                    if (result.userInfo) {
-                        const userName = result.userInfo.name || '사용자';
-                        document.getElementById('userName').textContent = userName + '님';
-                        document.getElementById('userIcon').textContent = userName.charAt(0);
-                    }
-                    
-                    console.log('성인인증 완료 - 사용자:', result.userInfo?.name || '사용자');
-                } else {
-                    // 미인증 상태 - 경고 메시지 표시 후 리다이렉트
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    document.getElementById('unauthorizedScreen').style.display = 'block';
-                    
-                    setTimeout(() => {
-                        window.location.href = '/auth';
-                    }, 2000);
-                }
-            } catch (error) {
-                console.error('인증 상태 확인 오류:', error);
-                
-                // 에러 시 안전하게 인증 페이지로 리다이렉트
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('unauthorizedScreen').style.display = 'block';
-                
-                setTimeout(() => {
-                    window.location.href = '/auth';
-                }, 2000);
-            }
-        }
-        
-        // 페이지 로드 시 인증 상태 확인
-        window.addEventListener('load', () => {
-            console.log('index.html 페이지 로드됨');
-            checkAuthStatus();
+  <!-- 메인 콘텐츠 (인증 후 표시) -->
+  <div id="mainContent" class="main-content">
+    <!-- ✅ 상단 검색 바 -->
+  <div class="top-search-bar">
+    <button id="homeBtn">🏠 홈</button>
+
+    <!-- 시도 자동 생성 -->
+    <select id="sido">
+      <option value="">시도 선택</option>
+    </select>
+
+    <!-- 구군 자동 변경 -->
+    <select id="gugun">
+      <option value="">구/군 선택</option>
+    </select>
+
+    <button id="searchBtn">검색</button>
+    <button id="resetSearch" title="검색 초기화">🔃</button>
+  </div>
+
+  <!-- ✅ 카테고리 바 -->
+  <div class="top-bar" id="categoryBar">
+    <div class="editor-toolbar">
+      <button class="category-button" onclick="filterByCategory('노래주점')">노래주점</button>
+      <button class="category-button" onclick="filterByCategory('룸싸롱')">룸싸롱</button>
+      <button class="category-button" onclick="filterByCategory('텐/쩜오')">텐/쩜오</button>
+      <button class="category-button" onclick="filterByCategory('BAR')">BAR</button>
+      <button class="category-button" onclick="filterByCategory('라이브')">라이브</button>
+      <button class="category-button" onclick="filterByCategory('다방')">다방</button>
+      <button class="category-button" onclick="filterByCategory('마사지')">마사지</button>
+      <button class="category-button" onclick="filterByCategory('BJ')">BJ</button>
+      <button class="category-button" onclick="filterByCategory('영업진')">영업진</button>
+      <button class="category-button" onclick="filterByCategory('기타')">기타</button>
+    </div>
+  </div>
+
+  <!-- 일반 사용자는 편집 툴 숨김 -->
+  <div class="top-bar admin-only" style="display: none;"></div>
+
+  <!-- 사진 업로드 버튼 숨김 -->
+  <input type="file" id="imageUpload" accept="image/*" multiple hidden disabled />
+
+  <!-- ✅ 부채꼴 제목 -->
+  <h1 class="curved-title" aria-label="★전국밤알바★">
+    <span>★</span><span>전</span><span>국</span><span>밤</span><span>알</span><span>바</span><span>★</span>
+  </h1>
+
+  <!-- 카드 앨범 -->
+  <div id="albumContainer" class="album-container"></div>
+  <div id="pagination" class="pagination"></div>
+
+  <!-- ✅ 기능 로직 -->
+  <script src="app.js"></script>
+
+  <!-- ✅ 시도/구군 연동 스크립트 (regionData는 app.js에 있음) -->
+  <script>
+    const sidoSelect = document.getElementById("sido");
+    const gugunSelect = document.getElementById("gugun");
+
+    // app.js의 regionData를 참조
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof regionData !== "undefined") {
+        Object.keys(regionData).forEach(sido => {
+          const opt = document.createElement("option");
+          opt.value = sido;
+          opt.textContent = sido;
+          sidoSelect.appendChild(opt);
         });
-        
-        // 여기에 실제 서비스 JavaScript 코드를 추가하세요
-        console.log("성인인증된 사용자만 접근 가능한 페이지입니다.");
-    </script>
-</body>
 
+        sidoSelect.addEventListener("change", function () {
+          gugunSelect.innerHTML = '<option value="">구/군 선택</option>';
+          const selectedSido = this.value;
+          if (regionData[selectedSido]) {
+            regionData[selectedSido].forEach(gugun => {
+              const opt = document.createElement("option");
+              opt.value = gugun;
+              opt.textContent = gugun;
+              gugunSelect.appendChild(opt);
+            });
+          }
+        });
+      } else {
+        console.error("regionData가 app.js에서 로드되지 않았습니다.");
+      }
+    });
+  </script>
+
+    <!-- ✅ 푸터 -->
+    <footer class="biz-info">
+      <p>상호명: 전국밤알바</p>
+      <p>대표자: 홍길동</p>
+      <p>사업자등록번호: 123-45-67890</p>
+      <p>주소: 서울특별시 강남구 테헤란로 123</p>
+      <p>문의: 010-1234-5678</p>
+    </footer>
+  </div> <!-- mainContent 끝 -->
+
+  <!-- 성인인증 체크 스크립트 -->
+  <script>
+    // 성인인증 상태 확인 함수
+    async function checkAuthStatus() {
+      try {
+        console.log('성인인증 상태 확인 시작...');
+        
+        const response = await fetch('/api/check-auth');
+        const result = await response.json();
+        
+        console.log('인증 상태 확인 결과:', result);
+        
+        if (result.isAuthenticated) {
+          // 인증된 경우 - 메인 콘텐츠 표시
+          document.getElementById('authLoadingScreen').style.display = 'none';
+          document.getElementById('authUnauthorizedScreen').style.display = 'none';
+          document.getElementById('mainContent').classList.add('show');
+          
+          console.log('✅ 성인인증 완료 - 메인 콘텐츠 표시');
+          
+          // 사용자 정보가 있으면 콘솔에 출력
+          if (result.userInfo) {
+            console.log('인증된 사용자:', result.userInfo.name || '사용자');
+          }
+        } else {
+          // 미인증 상태 - 경고 메시지 표시 후 리다이렉트
+          console.log('❌ 성인인증 필요 - 인증 페이지로 리다이렉트');
+          
+          document.getElementById('authLoadingScreen').style.display = 'none';
+          document.getElementById('authUnauthorizedScreen').style.display = 'flex';
+          
+          // 3초 후 인증 페이지로 리다이렉트
+          setTimeout(() => {
+            window.location.href = '/auth';
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('인증 상태 확인 오류:', error);
+        
+        // 에러 시 안전하게 인증 페이지로 리다이렉트
+        document.getElementById('authLoadingScreen').style.display = 'none';
+        document.getElementById('authUnauthorizedScreen').style.display = 'flex';
+        
+        setTimeout(() => {
+          window.location.href = '/auth';
+        }, 2000);
+      }
+    }
+    
+    // 페이지 로드 시 인증 상태 확인
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('★전국밤알바★ 페이지 로드 시작');
+      console.log('성인인증 시스템 - 인증 상태 확인 중...');
+      
+      // 약간의 지연 후 인증 확인 (자연스러운 로딩 효과)
+      setTimeout(() => {
+        checkAuthStatus();
+      }, 1000);
+    });
+  </script>
+
+</body>
 </html>

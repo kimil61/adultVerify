@@ -1,0 +1,339 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nanum Gothic', sans-serif;
+  background-color: #fafafa;
+  text-align: center;
+}
+
+/* 상단 검색 바 */
+.top-search-bar {
+  width: 100vw;
+  background-color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.top-search-bar select,
+.top-search-bar button {
+  font-size: 12px;
+  padding: 2px 4px;
+  height: 24px;
+  line-height: 1;
+}
+
+/* 카테고리 바 */
+#categoryBar {
+  position: sticky;
+  top: 42px;
+  z-index: 998;
+  background-color: #fff;
+}
+
+#editorToolbar {
+  position: sticky;
+  top: 100px;
+  z-index: 997;
+  background-color: #fff;
+}
+
+.top-bar {
+  background-color: #f2f2f2;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin: 16px auto 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: max-content;
+  max-width: 100%;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ✅ Grid 레이아웃: 가로 5 × 세로 4 */
+.album-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, auto); /* ✅ 기존 5줄 → 4줄로 변경 */
+  gap: 12px;
+  padding: 10px;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+/* 카드 */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 이미지 */
+.card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 제목 */
+.text-display {
+  font-size: 14px;
+  text-align: center;
+  user-select: text;
+  padding: 2px 4px;
+  word-break: break-word;
+  margin-top: 6px;
+  margin-bottom: 0;
+  line-height: 1.2;
+  border-radius: 6px;
+}
+
+/* 업소 정보 */
+.info-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 2px 4px;
+  font-size: 12px;
+  text-align: left;
+  word-break: break-word;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.info-label {
+  font-weight: bold;
+  min-width: 60px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.info-value {
+  flex: 1;
+  word-break: break-word;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.info-value.biz-highlight {
+  color: #FF6600;
+  font-weight: bold;
+}
+
+/* 연락처/메신저 중앙 정렬 */
+.center-align {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* 페이지네이션 */
+.pagination {
+  margin-top: 20px;
+}
+
+/* 푸터 */
+.biz-info {
+  background-color: #f9f9f9;
+  padding: 20px 12px;
+  font-size: 12px;
+  color: #666;
+  border-top: 1px solid #ddd;
+  margin-top: 40px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* 카테고리 버튼 활성화 */
+.category-button.active {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+}
+
+/* 검색 초기화 버튼 */
+#resetSearch {
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background-color: #e6f0ff;
+  color: #007bff;
+  border: 1px solid #99ccff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#resetSearch:hover {
+  background-color: #cce0ff;
+}
+
+/* 로그아웃 버튼 */
+#logoutBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+#logoutBtn i {
+  font-size: 18px;
+  color: gray;
+  transition: color 0.2s ease;
+}
+
+#logoutBtn:hover i {
+  color: red;
+}
+
+/* 깜빡임 효과 */
+.flash {
+  animation: flashHighlight 3s ease-in-out;
+}
+
+@keyframes flashHighlight {
+  0% { background-color: #e0f7ff; }
+  50% { background-color: #c3ecff; }
+  100% { background-color: #e0f7ff; }
+}
+
+/* 부채꼴 제목 */
+.curved-title {
+  position: relative;
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 0px;
+  height: 60px;
+  text-align: center;
+}
+
+.curved-title span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 28px;
+  font-weight: normal;
+  transform-origin: bottom center;
+}
+
+.curved-title span:nth-child(1) { transform: translateX(-260%) rotate(-36deg); }
+.curved-title span:nth-child(2) { transform: translateX(-180%) rotate(-24deg); }
+.curved-title span:nth-child(3) { transform: translateX(-100%) rotate(-12deg); }
+.curved-title span:nth-child(4) { transform: translateX(-10%) rotate(0deg); }
+.curved-title span:nth-child(5) { transform: translateX(80%) rotate(12deg); }
+.curved-title span:nth-child(6) { transform: translateX(160%) rotate(24deg); }
+.curved-title span:nth-child(7) { transform: translateX(240%) rotate(36deg); }
+
+/* 상세보기 버튼 */
+.toggle-info-btn {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  margin: 6px auto 0;
+}
+
+.toggle-info-btn:hover {
+  background-color: #e6e6e6;
+}
+
+/* 로그인 카드 */
+.login-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  width: 280px;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+/* 로그인 툴바 */
+.login-toolbar {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+/* 로그인 입력창 */
+.login-input {
+  padding: 8px;
+  font-size: 14px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* 로그인 버튼 */
+.login-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ 반응형 대응 */
+@media (max-width: 1024px) {
+  .album-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .album-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .album-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
