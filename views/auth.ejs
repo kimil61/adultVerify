@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성인인증</title>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 포트원 SDK -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .logo {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .warning-box p {
+      color: #856404;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .test-mode-box {
+      background: #d4edda;
+      border: 1px solid #28a745;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .test-mode-box p {
+      color: #155724;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+    
+    .btn-verify {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: 600;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    
+    .btn-verify:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-verify:active {
+      transform: translateY(0);
+    }
+    
+    .btn-test {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      width: 100%;
+    }
+    
+    .btn-test:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+    
+    .info {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #999;
+      font-size: 13px;
+    }
+    
+    .loading {
+      display: none;
+      margin-top: 20px;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🔐</div>
+    <h1>성인인증</h1>
+    <p class="subtitle">
+      본 서비스는 만 19세 이상만 이용 가능합니다.<br>
+      본인인증을 통해 연령을 확인해주세요.
+    </p>
+    
+    <% if (testMode) { %>
+    <div class="test-mode-box">
+      <p>🧪 테스트 모드가 활성화되었습니다</p>
+    </div>
+    <% } %>
+    
+    <div class="warning-box">
+      <p>
+        ⚠️ 주민등록번호는 수집하지 않습니다.<br>
+        본인인증 정보는 연령 확인 용도로만 사용됩니다.
+      </p>
+    </div>
+    
+    <% if (testMode) { %>
+    <button id="btnTestMode" class="btn-test">테스트 모드로 진입</button>
+    <% } else { %>
+    <button id="btnVerify" class="btn-verify">본인인증 하기</button>
+    <% } %>
+    
+    <div class="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 10px; color: #666;">인증 처리 중...</p>
+    </div>
+    
+    <div class="info">
+      <% if (testMode) { %>
+      테스트 모드에서는 실제 인증 없이 접근 가능합니다.
+      <% } else { %>
+      휴대폰 본인인증을 통해 안전하게 확인합니다.
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    <% if (!testMode) { %>
+    // 실제 PortOne 인증 모드
+    const IMP = window.IMP;
+    IMP.init('<%= impKey %>');
+    
+    document.getElementById('btnVerify').addEventListener('click', function() {
+      // 본인인증 요청
+      IMP.certification({
+        popup: true // PC에서는 팝업, 모바일에서는 리다이렉션
+      }, function(rsp) {
+        if (rsp.success) {
+          // 인증 성공
+          $('.loading').show();
+          $('#btnVerify').hide();
+          
+          // 서버에 인증 정보 전송
+          $.ajax({
+            url: '/auth/verify',
+            method: 'POST',
+            data: {
+              imp_uid: rsp.imp_uid,
+              success: true
+            },
+            success: function(result) {
+              $('.loading').hide();
+              
+              if (result.success) {
+                alert(result.message);
+                window.location.href = result.redirect;
+              } else {
+                alert(result.message);
+                $('#btnVerify').show();
+              }
+            },
+            error: function() {
+              $('.loading').hide();
+              alert('서버 통신 중 오류가 발생했습니다.');
+              $('#btnVerify').show();
+            }
+          });
+        } else {
+          // 인증 실패 또는 취소
+          alert('본인인증을 취소하셨습니다.');
+        }
+      });
+    });
+    <% } else { %>
+    // 테스트 모드
+    document.getElementById('btnTestMode').addEventListener('click', function() {
+      $('.loading').show();
+      $('#btnTestMode').hide();
+      
+      // 테스트 모드로 서버에 요청
+      $.ajax({
+        url: '/auth/verify',
+        method: 'POST',
+        data: {
+          imp_uid: 'test_mode',
+          success: true
+        },
+        success: function(result) {
+          $('.loading').hide();
+          
+          if (result.success) {
+            alert(result.message);
+            window.location.href = result.redirect;
+          } else {
+            alert(result.message);
+            $('#btnTestMode').show();
+          }
+        },
+        error: function() {
+          $('.loading').hide();
+          alert('서버 통신 중 오류가 발생했습니다.');
+          $('#btnTestMode').show();
+        }
+      });
+    });
+    <% } %>
+  </script>
+</body>
+</html>
